@@ -1,13 +1,13 @@
-export default {
+module.exports = {
   apps: [
     {
       name: 'hyperloc-api',
-      script: './server-demo.js',
-      instances: 1,
-      exec_mode: 'fork',
+      script: './server.js',
+      instances: 'max',
+      exec_mode: 'cluster',
       env: {
         NODE_ENV: 'production',
-        PORT: 5000
+        PORT: 3000
       },
       error_file: './logs/api-error.log',
       out_file: './logs/api-out.log',
@@ -16,17 +16,20 @@ export default {
       autorestart: true,
       watch: false,
       max_memory_restart: '500M',
-      ignore_watch: ['node_modules', 'dist', '.git']
+      ignore_watch: ['node_modules', 'dist', '.git', 'logs', 'src'],
+      kill_timeout: 5000,
+      listen_timeout: 3000,
+      shutdown_with_message: true
     },
     {
       name: 'hyperloc-frontend',
       script: 'npm',
-      args: 'run dev',
+      args: 'run preview',
       instances: 1,
       exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
-        PORT: 5173
+        PORT: 4173
       },
       error_file: './logs/frontend-error.log',
       out_file: './logs/frontend-out.log',
@@ -35,7 +38,10 @@ export default {
       autorestart: true,
       watch: false,
       max_memory_restart: '500M',
-      ignore_watch: ['node_modules', 'dist', '.git']
+      ignore_watch: ['node_modules', 'dist', '.git', 'logs', 'src'],
+      kill_timeout: 5000,
+      listen_timeout: 3000,
+      shutdown_with_message: true
     }
   ]
 }
